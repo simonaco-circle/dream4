@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/node:7.10-browsers
+      - image: circleci/node:6-browsers
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -28,6 +28,11 @@ jobs:
 
       - run: yarn install
 
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
       - run:
           name: build
           command: yarn ng build --prod --aot --no-progress
@@ -35,10 +40,6 @@ jobs:
           name: test
           command: yarn ng test --sr --no-progress
 
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
       - deploy:
           command: |
             sh scripts/publish.sh;
