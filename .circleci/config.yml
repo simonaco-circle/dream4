@@ -39,7 +39,9 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-
+      - deploy:
+          command: |
+            sh scripts/publish.sh;
 
 
 
